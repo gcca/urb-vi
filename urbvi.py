@@ -37,7 +37,7 @@ def urbvi():
 
     # Inicio del proceso
     vi.procesador.inic(args)
-    resultado = vi.procesador.ejecutar('inicio')
+    resultado = vi.procesador.ejecutar()
     print(resultado)
 
 if '__main__' == __name__:
