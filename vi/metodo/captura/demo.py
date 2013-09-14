@@ -1,4 +1,4 @@
-class Demo:
+class Demo(object):
 
     def ejecutar(self, fijo):
         if fijo is None:
