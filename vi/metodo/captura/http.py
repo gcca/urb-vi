@@ -23,6 +23,7 @@ class Captura(object):
         Rets:
             La imagen en formato JPG
         '''
+
         try:
             fuente = urlopen(url)
         except IOError:
@@ -47,7 +48,7 @@ class Captura(object):
                 # su sistema de excepciones. Mejora el mantenimiento.
                 raise IOError('Decodificador JPG')
             except:
-                return self.prev
+                return np.array()
 
             im = np.array(im)
 
