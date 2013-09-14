@@ -1,11 +1,5 @@
-'''
-Created on Sep 13, 2013
-
-@author: gcca
-'''
 import unittest2
 import vi.procesador
-
 
 class TestDemo(unittest2.TestCase):
 

@@ -12,6 +12,7 @@ import vi.procesador
 
 def urbvi():
     """Hilo de ejecución principal """
+
     parser = argparse.ArgumentParser(description=textwrap.dedent('''
     Urb - Vi Visor de Placas
 
