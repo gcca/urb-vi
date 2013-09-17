@@ -15,7 +15,14 @@ class Captura(object):
     Captura Http
     '''
 
-    def ejecutar(self, url):
+    def __init__(self, url):
+        try:
+            self.fuente = urlopen(url)
+        except IOError:
+            raise AttributeError
+
+
+    def ejecutar(self, *args):
         '''
         Args:
             url - URL de la imagen
@@ -23,32 +30,34 @@ class Captura(object):
         Rets:
             La imagen en formato JPG
         '''
+
+        fuente = self.fuente
+
+        constructor = []
+
+        for tarugo in fuente:
+            # \r\n
+            if 2 == len(tarugo):
+                break
+
+        for tarugo in fuente:
+            if '--myb' in tarugo:
+                break
+            constructor.append(tarugo)
+
+        io = ''.join(constructor)
+        img = StringIO(io)
         try:
-            fuente = urlopen(url)
+            img = Image.open(img).convert('RGB')
         except IOError:
-            raise AttributeError
-        else:
-            n = ''
-            for _ in xrange(3):
-                fuente.readline()
+            # IMLPEMENTAR SISTEMA DE LOGGING
+            # Este tipo de errores son propios de los cambios que se dan
+            # al hacer uso de una biblioteca que no se conoce
+            # su sistema de excepciones. Mejora el mantenimiento.
+            raise IOError('Decodificador JPG')
+        except:
+            return np.array()
 
-            for a in fuente:
-                if '--myb' in a:
-                    break
-                n += a
+        img = np.array(img)
 
-            im = StringIO(n)
-            try:
-                im = Image.open(im).convert('RGB')
-            except IOError:
-                # IMLPEMENTAR SISTEMA DE LOGGING
-                # Este tipo de errores son propios de los cambios que se dan
-                # al hacer uso de una biblioteca que no se conoce
-                # su sistema de excepciones. Mejora el mantenimiento.
-                raise IOError('Decodificador JPG')
-            except:
-                return self.prev
-
-            im = np.array(im)
-
-            return im
+        return img
