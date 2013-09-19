@@ -201,3 +201,14 @@ Primera Iteración: *Las demos*
 
 ### Alcance
 *__Pasar el fichero de alcance aquí__*
+
+### Estado
+
+ Hito | Estado
+:----:|----------
+  1   | Hecho
+  2   | Hecho
+  3   | Hecho
+  4   | Pospuesto
+  5   | Hecho
+  6   | Hecho
