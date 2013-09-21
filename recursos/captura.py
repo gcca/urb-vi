@@ -24,7 +24,7 @@ def var_estt(var_nom, val):
 @var_estt('val', 100)
 def intervalo(val):
     """Actualizar intervalo de video """
-    intervalo.val = val
+    intervalo.val = val + 1
 
 @var_estt('cont', 0)
 @var_estt('fich', None)
@@ -58,6 +58,8 @@ def captura(video_ruta, destino_dir):
 
     pausa = False
 
+    cv2.namedWindow('ven1')
+    cv2.createTrackbar('INTERVALO', 'ven1', intervalo.val, 700, intervalo)
     cam = cv2.VideoCapture(video_ruta)
     _, img = cam.read()
 
