@@ -1,0 +1,21 @@
+#+TITLE: Urb-Vi: Hoja de Ruta
+#+AUTHOR: cristHian Gz. (gcca), César Cárdenas (cccg), César Salazar (cmsa)
+#+DATE: 2013-09-20 sam.
+
+* Análsis de placas vehiculares                                       :PROJECT:
+
+** Tareas
+
+*** TODO Recolectar imágenes de muestra (100)
+   SCHEDULED: <2013-09-28 sáb>
+
+*** TODO Implementar flujo con una imagen
+   SCHEDULED: <2013-10-05 sáb>
+
+*** TODO Documentar el proceso `extracción`
+   SCHEDULED: <2013-10-05 sáb>
+
+*** TODO Documentar el proceso segmentación
+   SCHEDULED: <2013-10-05 sáb>
+
+* Intro
