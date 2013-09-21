@@ -27,7 +27,7 @@ def intervalo(val):
     intervalo.val = val
 
 @var_estt('cont', 0)
-@var_estt('fich', 123)
+@var_estt('fich', None)
 def imagen_guardar(img, dst_dir):
     """Guardar imagen en secuencia  """
     cont = str(imagen_guardar.cont)
@@ -54,6 +54,7 @@ def captura(video_ruta, destino_dir):
     """Ciclo de captura """
     assert '' != video_ruta
     assert '' != destino_dir
+    assert not imagen_guardar.fich is None
 
     pausa = False
 
