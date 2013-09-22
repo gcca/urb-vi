@@ -103,6 +103,7 @@ def inic():
 
     args = parser.parse_args()
 
+    assert os.path.exists(args.video), 'No existe el video ' + args.video
     assert os.path.exists(args.dir), 'No existe el directorio ' + args.dir
     assert args.cont_i.isdigit(), '`cont_i` debe ser un número'
 
@@ -110,5 +111,5 @@ def inic():
     captura(args.video, args.dir)
     contexto_fin()
 
-if __name__ == '__main__':
+if '__main__' == __name__:
     inic()
