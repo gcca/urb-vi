@@ -2,7 +2,7 @@
 #+AUTHOR: cristHian Gz. (gcca), César Cárdenas (cccg), César Salazar (cmsa)
 #+DATE: 2013-09-20 sam.
 
-* Análsis de placas vehiculares                                       :PROJECT:
+* Análisis de placas vehiculares                               :PROJECT:
 
 ** Tareas
 
