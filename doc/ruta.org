@@ -4,18 +4,21 @@
 
 * Análisis de placas vehiculares                               :PROJECT:
 
-** Tareas
+* DONE Recolectar imágenes de muestra (100)
+  CLOSED: [2013-09-27 vie 20:13] SCHEDULED: <2013-09-28 sáb>
 
-*** TODO Recolectar imágenes de muestra (100)
-   SCHEDULED: <2013-09-28 sáb>
+* TODO Implementar flujo con una imagen
+  SCHEDULED: <2013-10-05 sáb>
 
-*** TODO Implementar flujo con una imagen
-   SCHEDULED: <2013-10-05 sáb>
+* TODO Describir el proceso reconocimiento
+  SCHEDULED: <2013-10-19 sáb>
 
-*** TODO Documentar el proceso `extracción`
-   SCHEDULED: <2013-10-05 sáb>
+* TODO Describir el proceso segmentación
+  SCHEDULED: <2013-10-19 sáb>
 
-*** TODO Documentar el proceso segmentación
-   SCHEDULED: <2013-10-05 sáb>
+* TODO Implementar ciclo de captura de imagen y fin de proceso
+  SCHEDULED: <2013-10-05 sáb>
 
-* Intro
+* TODO Implementar interface para pasar parámetros al constructor
+
+* TODO Cambiar el texto `extraccion` por `reconocimiento`
