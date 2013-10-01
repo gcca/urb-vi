@@ -31,9 +31,9 @@ def urbvi():
     parser.add_argument('--met_segmentacion',
                         metavar='SEGMENTACION',
                         help='Nombre del método de segmentación.')
-    parser.add_argument('--met_extraccion',
-                        metavar='EXTRACCION',
-                        help='Nombre del método de extracción.')
+    parser.add_argument('--met_reconocimiento',
+                        metavar='RECONOCIMIENTO',
+                        help='Nombre del método de reconocimiento.')
     args = parser.parse_args()
 
     # Inicio del proceso

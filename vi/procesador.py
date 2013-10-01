@@ -39,7 +39,7 @@ def inic(args):
         >>> args.met_segmentacion = 'demo'
         >>> args.met_reconocimiento = 'demo'
     """
-    for nombre in ['captura', 'deteccion', 'segmentacion', 'extraccion']:
+    for nombre in ['captura', 'deteccion', 'segmentacion', 'reconocimiento']:
         metodo = getattr(args, 'met_' + nombre)
         modulo = importlib.import_module('vi.metodo.' + nombre + '.' + metodo)
         Metodo = getattr(modulo, metodo.capitalize())
