@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-Método detecction tesseractOCR
+Método reconocimiento tesseractOCR
 '''
 
 import cv2.cv as cv
@@ -9,9 +9,9 @@ import cv2
 import tesseract
 
 
-class Deteccion(object):
+class Reconocimiento(object):
 	'''
-	Deteccion
+	reconocimiento
 	'''
 	
 	def ejecutar(self,img):
@@ -41,6 +41,5 @@ class Deteccion(object):
 			#enviando imagen binarizada al tesseract
 			tesseract.SetCvImage(imgbincv,api)
 			text=api.GetUTF8Text()
-			conf=api.MeanTextConf()
 			return text
 
