@@ -13,8 +13,11 @@ class Reconocimiento(object):
 	'''
 	reconocimiento
 	'''
+	def __init__(self):
+		self.dicc = {};
+		self.arrayPlacas=[];
 	
-	def ejecutar(self,img):
+	def leerPlaca(self,img):
 		'''
         Args:
             img - imagen que contiene el texto, obtenida con la funcion cv2.imread
@@ -42,4 +45,19 @@ class Reconocimiento(object):
 			tesseract.SetCvImage(imgbincv,api)
 			text=api.GetUTF8Text()
 			return text
+	
+	def generarDiccionario(self,img):
+		self.dicc[img]=self.leerPlaca(img);
+	
+	def ejecutar(self,arrayImg):
+		'''
+        Args:
+            arrayImg - Arrego de imagenes, obtenidas con la funcion cv2.imread
+
+        Rets:
+            array de las placas
+        '''
+		for img in arrayImg:
+			self.arrayPlacas.append(self.leerPlaca(img));
+		return self.arrayPlacas;
 
