@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Método segmentacion de la imagen
-'''
+"""
 
 import cv2
 
 class Segmentacion(object):
-    '''
+    """
     Segmentación
-    '''
+    """
     def ejecutar(self, img, min_area):
         frame_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         _, frame_bi = cv2.threshold(frame_gray, 100, 255, cv2.THRESH_BINARY)

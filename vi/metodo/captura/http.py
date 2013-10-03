@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Método Http
-'''
+"""
 
 from urllib2 import urlopen
 from PIL import Image
@@ -11,9 +11,9 @@ import numpy as np
 
 
 class Captura(object):
-    '''
+    """
     Captura Http
-    '''
+    """
 
     def __init__(self, url):
         try:
@@ -23,13 +23,13 @@ class Captura(object):
 
 
     def ejecutar(self, *args):
-        '''
+        """
         Args:
             url - URL de la imagen
 
         Rets:
             La imagen en formato JPG
-        '''
+        """
 
         fuente = self.fuente
 
