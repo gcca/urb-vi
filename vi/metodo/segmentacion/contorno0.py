@@ -34,7 +34,7 @@ class Segmentacion(object):
         return baldosas
 
     def validar(self, contorno):
-        """Devuelve un generador con valore booleanos por cada filtro
+        """Devuelve un generador con valores booleanos por cada filtro
 
         >>> # Si hubieran dos filtros y el segundo falla
         >>> list(self.validar(contorno))
