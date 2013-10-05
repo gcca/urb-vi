@@ -29,7 +29,7 @@ class Segmentacion(object):
                 filtrados.append(contorno)
 
         regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
-        baldosas = [imagen[y:y + dy, x:x + dx] for x, y, dx, dy in regiones]
+        baldosas = [imagen[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
 
         return baldosas
 
