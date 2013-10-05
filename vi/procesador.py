@@ -9,17 +9,15 @@ La variable `procesos` mantiene el orden de lo métodos empleados: captura,
 
 import importlib
 
-procesos = []
+PROCESOS = []
 
 def ejecutar(resultado=None):
     """(object) -> NoneType
 
     Primer parámetro de proceso
     """
-
-    for proceso in procesos:
+    for proceso in PROCESOS:
         resultado = proceso.ejecutar(resultado)
-
     return resultado
 
 def inic(args):
@@ -42,6 +40,6 @@ def inic(args):
     for nombre in ['captura', 'deteccion', 'segmentacion', 'reconocimiento']:
         metodo = getattr(args, 'met_' + nombre)
         modulo = importlib.import_module('vi.metodo.' + nombre + '.' + metodo)
-        Metodo = getattr(modulo, metodo.capitalize())
-        instanciaMetodo = Metodo()
-        procesos.append(instanciaMetodo)
+        metodo_clase = getattr(modulo, metodo.capitalize())
+        metodo_instancia = metodo_clase()
+        PROCESOS.append(metodo_instancia)
