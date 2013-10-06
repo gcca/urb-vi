@@ -9,7 +9,7 @@ class Segmentacion(object):
 
     def __init__(self):
         """Inicia la lista de filtros """
-        self.filtros = [self.filtro_numPixeles]
+        self.filtros = [self.filtro_npixeles]
 
     def ejecutar(self, imagen):
         """Recibe una imagen y retorna una lista con las secciones limitadas
@@ -29,7 +29,7 @@ class Segmentacion(object):
                 filtrados.append(contorno)
 
         regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
-        baldosas = [imagen[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
+        baldosas = [imagen[y:(y + dy), x:(x + dx)] for x, y, dx, dy in regiones]
 
         return baldosas
 
@@ -42,7 +42,8 @@ class Segmentacion(object):
         """
         return (bool(filtrar(contorno)) for filtrar in self.filtros)
 
-    def filtro_numPixeles(self, contorno):
+    @staticmethod
+    def filtro_npixeles(contorno):
         """Filtro simple
         No considerar como válido porque solo aplica a la imagen de la demo
         """

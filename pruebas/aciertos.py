@@ -5,15 +5,17 @@
 Prueba que ejecuta la aplicación por cada imagen y verifica si la placa
 fue leída correctamente.
 """
-from __future__ import print_function, absolute_import
+from __future__ import print_function
 
 import sys
 sys.path.append('..')
+sys.path.append('.')
 
 import os
 import argparse
 import csv
 import vi.procesador
+import mock
 
 
 def dicc_imagen_placas(ruta_csv):
@@ -62,6 +64,11 @@ def inicio():
     parser.add_argument('ruta_imagenes')
     args = parser.parse_args()
     assert not args.ruta_imagenes is None, 'Sin ruta a las imágenes'
+    procesador_args = mock.Mock(met_captura='demo',
+                                met_deteccion='demo',
+                                met_segmentacion='demo',
+                                met_reconocimiento='demo')
+    vi.procesador.iniciar(procesador_args)
     contador_aciertos(args.ruta_imagenes)
 
 if '__main__' == __name__:

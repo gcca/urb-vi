@@ -12,7 +12,6 @@ import vi.procesador
 
 def urbvi():
     """Hilo de ejecución principal """
-
     parser = argparse.ArgumentParser(description=textwrap.dedent('''
     Urb - Vi Visor de Placas
 
@@ -37,7 +36,7 @@ def urbvi():
     args = parser.parse_args()
 
     # Inicio del proceso
-    vi.procesador.inic(args)
+    vi.procesador.iniciar(args)
     resultado = vi.procesador.ejecutar()
     print(resultado)
 
