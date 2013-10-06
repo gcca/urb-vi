@@ -16,19 +16,20 @@ def ejecutar(resultado=None):
 
     Primer parámetro de proceso
     """
+    assert PROCESOS, 'Invocar antes la función `iniciar(args)`'
     for proceso in PROCESOS:
         resultado = proceso.ejecutar(resultado)
     return resultado
 
-def inic(args):
+def iniciar(args):
     """() -> NoneType
 
     Recaba las clase definidas en `args`
 
-    'fichero'    Imagen         Imagen           Arreglo             Placas
-       +---------+  +-----------+  +--------------+  +----------------+
-     o-| Captura |->| Deteccion |->| Segmentacion |->| Reconocimiento |-@
-       +---------+  +-----------+  +--------------+  +----------------+
+    'fichero'    Imagen         Imagen            Arreglo            Placas
+        +---------+  +-----------+  +--------------+  +----------------+
+      o-| Captura |->| Deteccion |->| Segmentacion |->| Reconocimiento |-@
+        +---------+  +-----------+  +--------------+  +----------------+
 
     Args:
         args - Objeto con atributos de los métodos
