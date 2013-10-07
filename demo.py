@@ -1,9 +1,13 @@
 #!/usr/bin/python
-
+# encoding: utf-8
+"""
+Ejecutar demo
+"""
 import sys
 import importlib
 
 def inicio(ruta):
+    """Recibe la ruta del módulo que contiene la demo """
     modulo = importlib.import_module('demo.' + ruta)
     modulo.demo()
 
