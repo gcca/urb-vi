@@ -1,6 +1,16 @@
 Guía de desarrollo
 ==================
 
+## Instalar dependencias del proyecto
+En la raíz del proyecto, ejecutar
+```bash
+./setup.py develop
+```
+o
+```bash
+sudo setup.py develop
+```
+
 ## Bzr Workflow
 ![Comando de bzr](./img/bzr-workflow.png)
 
