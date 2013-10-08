@@ -33,11 +33,14 @@ def urbvi():
     parser.add_argument('--met_reconocimiento',
                         metavar='RECONOCIMIENTO',
                         help='Nombre del método de reconocimiento.')
+    parser.add_argument('--param',
+                        metavar='PARAMETRO',
+                        help='Parámetro inicial. Ruta a la imagen.')
     args = parser.parse_args()
 
     # Inicio del proceso
     vi.procesador.iniciar(args)
-    resultado = vi.procesador.ejecutar()
+    resultado = vi.procesador.ejecutar(args.param)
     print(resultado)
 
 if '__main__' == __name__:

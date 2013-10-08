@@ -1,4 +1,4 @@
-#!/usr/local/bin/python2.7
+#!/usr/bin/python
 # encoding: utf-8
 """
 vi.procesador -- brief
@@ -6,6 +6,7 @@ vi.procesador -- brief
 La variable `procesos` mantiene el orden de lo métodos empleados: captura,
 
 """
+from __future__ import unicode_literals, print_function
 
 import importlib
 
@@ -13,13 +14,31 @@ PROCESOS = []
 
 def ejecutar(resultado=None):
     """(object) -> NoneType
+    Args:
+        resulado -- Primer parámetro de proceso
 
-    Primer parámetro de proceso
+    Excepciones:
+     - Lanzar `ValueError` cuando existen excepciones por haber recibido
+       un mal parámetro.
+     - Cualquier otra excepción debida a la implementación debe ir solo
+       como `Exception` o alguna otra afín.
     """
     assert PROCESOS, 'Invocar antes la función `iniciar(args)`'
-    for proceso in PROCESOS:
-        resultado = proceso.ejecutar(resultado)
-    return resultado
+    try:
+        for proceso in PROCESOS:
+            resultado = proceso.ejecutar(resultado)
+    except ValueError as err:
+        raise SystemExit('\nMódulo '
+                           + str(type(proceso))
+                           + ' recibió parámetro incorreco: '
+                           + err.message)
+    except Exception as err:
+        raise SystemExit('\nMódulo '
+                           + str(type(proceso))
+                           + ' error: '
+                           + err.message)
+    else:
+        return resultado
 
 def iniciar(args):
     """() -> NoneType
@@ -41,6 +60,6 @@ def iniciar(args):
     for nombre in ['captura', 'deteccion', 'segmentacion', 'reconocimiento']:
         metodo = getattr(args, 'met_' + nombre)
         modulo = importlib.import_module('vi.metodo.' + nombre + '.' + metodo)
-        metodo_clase = getattr(modulo, metodo.capitalize())
+        metodo_clase = getattr(modulo, nombre.capitalize())
         metodo_instancia = metodo_clase()
         PROCESOS.append(metodo_instancia)
