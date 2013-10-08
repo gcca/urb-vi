@@ -19,10 +19,10 @@ class Captura(object):
         try:
             self.fuente = urlopen(url)
         except IOError:
-            raise AttributeError
+            raise ValueError('Url incorrecta')
 
 
-    def ejecutar(self, *args):
+    def ejecutar(self, _=None):
         """
         Args:
             url - URL de la imagen
@@ -45,8 +45,8 @@ class Captura(object):
                 break
             constructor.append(tarugo)
 
-        io = ''.join(constructor)
-        img = StringIO(io)
+        imgraw = ''.join(constructor)
+        img = StringIO(imgraw)
         try:
             img = Image.open(img).convert('RGB')
         except IOError:
