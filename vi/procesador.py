@@ -8,6 +8,8 @@ La variable `procesos` mantiene el orden de lo métodos empleados: captura,
 """
 from __future__ import unicode_literals, print_function
 
+import sys
+import os
 import importlib
 
 PROCESOS = []
@@ -25,6 +27,14 @@ def ejecutar(resultado=None):
     """
     assert PROCESOS, 'Invocar antes la función `iniciar(args)`'
     try:
+        devnull = open(os.devnull, 'w')
+        fdnul = devnull.fileno()
+        fdout = sys.stdout.fileno()
+        fderr = sys.stderr.fileno()
+        dupfdout = os.dup(fdout)
+        dupfderr = os.dup(fderr)
+        os.dup2(fdnul, fdout)
+        os.dup2(fdnul, fderr)
         for proceso in PROCESOS:
             resultado = proceso.ejecutar(resultado)
     except ValueError as err:
@@ -38,6 +48,10 @@ def ejecutar(resultado=None):
                            + ' error: '
                            + err.message)
     else:
+        sys.stdout.flush()
+        sys.stderr.flush()
+        os.dup2(dupfdout, fdout)
+        os.dup2(dupfderr, fderr)
         return resultado
 
 def iniciar(args):
