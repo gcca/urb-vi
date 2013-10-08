@@ -64,10 +64,10 @@ def inicio():
     parser.add_argument('ruta_imagenes')
     args = parser.parse_args()
     assert not args.ruta_imagenes is None, 'Sin ruta a las imágenes'
-    procesador_args = mock.Mock(met_captura='demo',
-                                met_deteccion='demo',
-                                met_segmentacion='demo',
-                                met_reconocimiento='demo')
+    procesador_args = mock.Mock(met_captura='babas',
+                                met_deteccion='babas',
+                                met_segmentacion='contorno1',
+                                met_reconocimiento='tesseractOCR')
     vi.procesador.iniciar(procesador_args)
     contador_aciertos(args.ruta_imagenes)
 
