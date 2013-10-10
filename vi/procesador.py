@@ -39,14 +39,14 @@ def ejecutar(resultado=None):
             resultado = proceso.ejecutar(resultado)
     except ValueError as err:
         raise SystemExit('\nMódulo '
-                           + str(type(proceso))
-                           + ' recibió parámetro incorreco: '
-                           + err.message)
+                         + str(type(proceso))
+                         + ' recibió parámetro incorreco: '
+                         + err.message)
     except Exception as err:
         raise SystemExit('\nMódulo '
-                           + str(type(proceso))
-                           + ' error: '
-                           + err.message)
+                         + str(type(proceso))
+                         + ' error: '
+                         + str(err))
     else:
         sys.stdout.flush()
         sys.stderr.flush()
