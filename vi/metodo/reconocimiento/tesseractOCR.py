@@ -16,7 +16,7 @@ class Reconocimiento(object):
 	def __init__(self):
 		self.dicc = {};
 		self.arrayPlacas=[];
-	
+
 	def leerPlaca(self,img):
 		"""
         Args:
@@ -45,10 +45,10 @@ class Reconocimiento(object):
 			tesseract.SetCvImage(imgbincv,api)
 			text=api.GetUTF8Text()
 			return text
-	
+
 	def generarDiccionario(self,img):
 		self.dicc[img]=self.leerPlaca(img);
-	
+
 	def ejecutar(self,arrayImg):
 		"""
         Args:
@@ -60,4 +60,3 @@ class Reconocimiento(object):
 		for img in arrayImg:
 			self.arrayPlacas.append(self.leerPlaca(img));
 		return self.arrayPlacas;
-
