@@ -9,7 +9,8 @@ class Segmentacion(object):
 
     def __init__(self):
         """Inicia la lista de filtros """
-        self.filtros = [self.filtro_npixeles]
+        self._filtros = [self.filtro_npixeles]
+        self._procesadores = []
 
     def ejecutar(self, imagen):
         """Recibe una imagen y retorna una lista con las secciones limitadas
@@ -31,7 +32,13 @@ class Segmentacion(object):
         regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
         baldosas = [imagen[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
 
-        return baldosas
+        procesadas = []
+        for baldosa in baldosas:
+            procesadas.append(self.procesar(baldosa))
+
+        if not procesadas: procesadas = baldosas
+
+        return procesadas
 
     def validar(self, contorno):
         """Devuelve un generador con valores booleanos por cada filtro
@@ -40,7 +47,13 @@ class Segmentacion(object):
         >>> list(self.validar(contorno))
         [True, False]
         """
-        return (bool(filtrar(contorno)) for filtrar in self.filtros)
+        return (bool(filtrar(contorno)) for filtrar in self._filtros)
+
+    def procesar(self, baldosa):
+        procesada = baldosa
+        for procesador in self._procesadores:
+            procesada = procesador(procesada)
+        return procesada
 
     @staticmethod
     def filtro_npixeles(contorno):

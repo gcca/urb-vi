@@ -13,7 +13,7 @@ class Segmentacion(contorno0.Segmentacion):
     def __init__(self):
         """Agrega el filtro """
         super(Segmentacion, self).__init__()
-        self.filtros.append(self.filtro_recthorizontal)
+        self._filtros.append(self.filtro_recthorizontal)
 
     @staticmethod
     def filtro_recthorizontal(contorno):
