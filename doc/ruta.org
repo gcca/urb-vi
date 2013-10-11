@@ -7,18 +7,20 @@
 * DONE Recolectar imágenes de muestra (100)
   CLOSED: [2013-09-27 vie 20:13] SCHEDULED: <2013-09-28 sáb>
 
-* TODO Implementar flujo con una imagen
-  SCHEDULED: <2013-10-05 sáb>
+* DONE Implementar flujo con una imagen
+  CLOSED: [2013-10-10 jue 21:30] SCHEDULED: <2013-10-05 sáb>
 
-* TODO Describir el proceso reconocimiento
-  SCHEDULED: <2013-10-19 sáb>
+* DONE Describir el proceso reconocimiento
+  CLOSED: [2013-10-10 jue 21:31] SCHEDULED: <2013-10-19 sáb>
 
-* TODO Describir el proceso segmentación
-  SCHEDULED: <2013-10-19 sáb>
+* DONE Describir el proceso segmentación
+  CLOSED: [2013-10-10 jue 21:31] SCHEDULED: <2013-10-19 sáb>
 
-* TODO Implementar ciclo de captura de imagen y fin de proceso
-  SCHEDULED: <2013-10-05 sáb>
+* DONE Implementar ciclo de captura de imagen y fin de proceso
+  CLOSED: [2013-10-10 jue 21:31] SCHEDULED: <2013-10-05 sáb>
 
-* TODO Implementar interface para pasar parámetros al constructor
+* DONE Implementar interface para pasar parámetros al constructor
+  CLOSED: [2013-10-10 jue 21:31]
 
-* TODO Cambiar el texto `extraccion` por `reconocimiento`
+* DONE Cambiar el texto `extraccion` por `reconocimiento`
+  CLOSED: [2013-10-10 jue 21:31]
