@@ -6,16 +6,24 @@ from __future__ import division
 
 import cv2
 import numpy as np
-import vi.metodo.segmentacion.contorno1 as contorno1
 
-class Segmentacion(contorno1.Segmentacion):
+class Segmentacion(object):
     """Segmentación con filtro por área media """
 
     def __init__(self):
         """Agrega el procesador """
         super(Segmentacion, self).__init__()
-        self._procesadores.append(self.procesador_areamedia)
+    
+    def ejecutar(self, baldosas):
+        """
+        Args:
+            baldosas - Arrego de secciones imagen, donde se detectaron placas 
 
+        Rets:
+            Array de imágenes optimizadas para su lectura
+        """
+        return [self.procesador_areamedia(baldosa) for baldosa in baldosas]
+        
     @staticmethod
     def procesador_areamedia(baldosa):
         """En base al promedio, retira elementos que podrían no ser letras """
@@ -27,11 +35,11 @@ class Segmentacion(contorno1.Segmentacion):
 
         mask = np.zeros(gris.shape, np.uint8)
         areas = [cv2.contourArea(c) for c in contornos]
-        mu = np.array(areas).mean()
+        muh = np.array(areas).mean()
 
         filtrados = []
         for contorno, area in zip(contornos, areas):
-            if 50 < area < mu:
+            if 50 < area < muh:
                 filtrados.append(contorno)
 
         cv2.drawContours(mask, filtrados, -1, 255, -1)

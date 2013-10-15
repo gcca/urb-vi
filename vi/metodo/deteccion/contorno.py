@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 
-"""Segmetación por búsqueda de contornos """
-
+"""Detección por búsqueda de contornos """
+from __future__ import division
 import cv2
 
-class Segmentacion(object):
-    """Segmentación por contornos """
-
+class Deteccion(object):
+    """Detección de contornos """
+    
     def __init__(self):
         """Inicia la lista de filtros """
         self._filtros = [self.filtro_npixeles]
         self._procesadores = []
-
+        
     def ejecutar(self, imagen):
         """Recibe una imagen y retorna una lista con las secciones limitadas
         por los contornos """
@@ -31,15 +31,8 @@ class Segmentacion(object):
 
         regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
         baldosas = [imagen[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
-
-        procesadas = []
-        for baldosa in baldosas:
-            procesadas.append(self.procesar(baldosa))
-
-        if not procesadas: procesadas = baldosas
-
-        return procesadas
-
+        return baldosas
+    
     def validar(self, contorno):
         """Devuelve un generador con valores booleanos por cada filtro
 
@@ -48,12 +41,6 @@ class Segmentacion(object):
         [True, False]
         """
         return (bool(filtrar(contorno)) for filtrar in self._filtros)
-
-    def procesar(self, baldosa):
-        procesada = baldosa
-        for procesador in self._procesadores:
-            procesada = procesador(procesada)
-        return procesada
 
     @staticmethod
     def filtro_npixeles(contorno):

@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
-"""Segmetación por búsqueda de contornos """
+"""Detección por búsqueda de contornos rectangulares horizontales"""
 
 from __future__ import division
 
 import cv2
-import vi.metodo.segmentacion.contorno0 as contorno0
+import vi.metodo.deteccion.contorno as padre
 
-class Segmentacion(contorno0.Segmentacion):
-    """Segmentación con filtro para zona reactangulares horizontales """
+
+class Deteccion(padre.Deteccion):
+    """Detección con filtro para zona reactangulares horizontales """
 
     def __init__(self):
         """Agrega el filtro """
-        super(Segmentacion, self).__init__()
+        super(Deteccion, self).__init__()
         self._filtros.append(self.filtro_recthorizontal)
 
     @staticmethod
