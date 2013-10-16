@@ -2,9 +2,9 @@
 
 """Método reconocimiento tesseractOCR. """
 
+import re
 from cv2 import cv
 import tesseract
-import re
 
 class Reconocimiento(object):
     """Reconocimiento. """
@@ -26,7 +26,7 @@ class Reconocimiento(object):
         api.Init(".", "eng", tesseract.OEM_DEFAULT)
         api.SetPageSegMode(tesseract.PSM_AUTO)
 
-        # Enviando imagen binarizada al tesseract       
+        # Enviando imagen binarizada al tesseract
         tesseract.SetCvImage(imgbincv, api)
         text = api.GetUTF8Text()
         text = re.sub(r'\W+', '', text)
@@ -35,7 +35,7 @@ class Reconocimiento(object):
     def ejecutar(self, baldosas):
         """
         Args:
-            baldosas - Arrego de imágenes, con el texto de la placa
+            arrayImg - Arrego de imagenes, obtenidas con la funcion cv2.imread
 
         Rets:
             array de las placas
