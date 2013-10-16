@@ -5,10 +5,10 @@
 from __future__ import division
 
 import cv2
-import vi.metodo.deteccion.contorno as padre
+from vi.metodo.deteccion.contorno import Deteccion as DeteccionBase
 
 
-class Deteccion(padre.Deteccion):
+class Deteccion(DeteccionBase):
     """Detección con filtro para zona reactangulares horizontales """
 
     def __init__(self):

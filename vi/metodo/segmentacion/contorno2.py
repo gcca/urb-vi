@@ -6,15 +6,28 @@ from __future__ import division
 
 import cv2
 import numpy as np
-import vi.metodo.segmentacion.contorno1 as contorno1
 
-class Segmentacion(contorno1.Segmentacion):
+
+class Segmentacion(object):
     """Segmentación con filtro por área media """
 
     def __init__(self):
         """Agrega el procesador """
         super(Segmentacion, self).__init__()
-        self._procesadores.append(self.procesador_areamedia)
+        self._procesadores = [self.procesador_areamedia]
+
+    def ejecutar(self, baldosas):
+        """Recibe una lista de baldosas para ser pre-procesadas y mejorar
+        la lectura de los caracteres. Retorna la lista de baldosas procesadas.
+        """
+        return [self._procesar(baldosa) for baldosa in baldosas]
+
+    def _procesar(self, baldosa):
+        """Aplica los pre-procesadores a la baldosa. """
+        procesada = baldosa
+        for procesador in self._procesadores:
+            procesada = procesador(procesada)
+        return procesada
 
     @staticmethod
     def procesador_areamedia(baldosa):

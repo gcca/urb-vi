@@ -4,14 +4,14 @@
 from __future__ import division
 import cv2
 
+
 class Deteccion(object):
     """Detección de contornos """
-    
+
     def __init__(self):
         """Inicia la lista de filtros """
         self._filtros = [self.filtro_npixeles]
-        self._procesadores = []
-        
+
     def ejecutar(self, imagen):
         """Recibe una imagen y retorna una lista con las secciones limitadas
         por los contornos """
@@ -32,7 +32,7 @@ class Deteccion(object):
         regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
         baldosas = [imagen[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
         return baldosas
-    
+
     def validar(self, contorno):
         """Devuelve un generador con valores booleanos por cada filtro
 
