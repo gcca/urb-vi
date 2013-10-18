@@ -54,7 +54,13 @@ def iniciar(args):
     """
     for nombre in ['captura', 'deteccion', 'segmentacion', 'reconocimiento']:
         metodo = getattr(args, 'met_' + nombre)
-        modulo = importlib.import_module('vi.metodo.' + nombre + '.' + metodo)
+        try:
+            modulo = importlib.import_module(
+                'vi.metodo.' + nombre + '.' + metodo)
+        except ImportError:
+            print('Error al importar: %s.%s' % (nombre, metodo))
+            import sys
+            sys.exit(-1)
         metodo_clase = getattr(modulo, nombre.capitalize())
         metodo_instancia = metodo_clase()
         PROCESOS.append(metodo_instancia)
