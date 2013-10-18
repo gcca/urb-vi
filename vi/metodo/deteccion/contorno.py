@@ -10,7 +10,8 @@ class Deteccion(object):
 
     def __init__(self):
         """Inicia la lista de filtros """
-        self._filtros = [self.filtro_npixeles]
+        self._filtros = [self.filtro_npixeles,
+                         self.filtro_recthorizontal]
 
     def ejecutar(self, imagen):
         """Recibe una imagen y retorna una lista con las secciones limitadas
@@ -48,3 +49,9 @@ class Deteccion(object):
         No considerar como válido porque solo aplica a la imagen de la demo
         """
         return 200 < len(contorno)
+
+    @staticmethod
+    def filtro_recthorizontal(contorno):
+        """Verifica que el contorno contiene un rectángulo horizontal """
+        _, _, ancho, alto = cv2.boundingRect(contorno)
+        return alto < ancho/2.5
