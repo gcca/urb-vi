@@ -5,7 +5,6 @@
 from __future__ import division
 
 import cv2
-import numpy as np
 import vi.metodo.segmentacion.contorno_base as contorno_base
 
 
@@ -22,11 +21,14 @@ class Segmentacion(contorno_base.Segmentacion):
 
         gris, filtrados = self._filtro_area(baldosa)
 
-        mascara = np.zeros(gris.shape, np.uint8)
-        cv2.drawContours(mascara, filtrados, -1, 255, 1)
+        marcos = []
+        if len(filtrados) > 4:
+            regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
+            _, binario = cv2.threshold(gris, 90, 255, cv2.THRESH_BINARY_INV)
+            letras = [binario[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
 
-        shape = (gris.shape[0] + 10, gris.shape[1] + 10)
-        marco = np.zeros(shape, np.uint8)
-        marco[5:gris.shape[0]+5, 5:gris.shape[1]+5] = mascara
+            for letra in letras:
+                zoom = cv2.resize(letra, (100, 100))
+                marcos.append(zoom)
 
-        return marco
+        return marcos
