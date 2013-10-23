@@ -6,6 +6,8 @@ from __future__ import division
 
 import cv2
 import numpy as np
+from itertools import izip
+
 
 class Segmentacion(object):
     """Segmentación con filtro por área media """
@@ -38,7 +40,6 @@ class Segmentacion(object):
                                         cv2.RETR_TREE,
                                         cv2.CHAIN_APPROX_SIMPLE)
 
-        mask = np.zeros(gris.shape, np.uint8)
         areas = [cv2.contourArea(c) for c in contornos]
         d_areas =  np.array(areas)
         mu = d_areas.mean()
@@ -48,17 +49,24 @@ class Segmentacion(object):
         for contorno, area in zip(contornos, areas):
             if 50 < area < mu - 0.05*sigma:
                 filtrados.append(contorno)
-        
-        cv2.drawContours(mask, filtrados, -1, 255, -1)
-        binarizado = mask
-        binarizado = cv2.cvtColor(binarizado, cv2.COLOR_GRAY2BGR)
-        
-        #dif1=cv2.addWeighted(binarizado,1,binarizadoSrc2,1,0)
-        dif1=cv2.absdiff(binarizadoSrc2,binarizado)
-        
-        cv2.imshow('fuente1', binarizadoSrc2)
-        cv2.imshow('fuente2', binarizado)
-        cv2.imshow('dif', dif1)
-        cv2.waitKey()
-        
-        return dif1
+
+        mascara = np.zeros(gris.shape, np.uint8)
+        cv2.drawContours(mascara, filtrados, -1, 255, 1)
+
+        shape = (gris.shape[0] + 10, gris.shape[1] + 10)
+        marco = np.zeros(shape, np.uint8)
+        marco[5:gris.shape[0]+5, 5:gris.shape[1]+5] = mascara
+
+        # _, binarizado_base = cv2.threshold(gris, 90, 255, cv2.THRESH_BINARY)
+        # diff = cv2.absdiff(binarizado_base, mascara)
+        # cv2.imshow('video', diff)
+        # cv2.waitKey()
+
+        # shape = tuple(sum(x) for x in izip(baldosa.shape, (10, 10, 0)))
+        # bald = np.zeros(shape, np.uint8)
+        # bald[:baldosa.shape[0], :baldosa.shape[1]] = baldosa
+        # masc = cv2.cvtColor(marco, cv2.COLOR_GRAY2BGR)
+        # cv2.imshow('video', np.hstack((bald, masc)))
+        # cv2.waitKey()
+
+        return marco
