@@ -57,8 +57,8 @@ def iniciar(args):
         try:
             modulo = importlib.import_module(
                 'vi.metodo.' + nombre + '.' + metodo)
-        except ImportError:
-            print('Error al importar: %s.%s' % (nombre, metodo))
+        except ImportError as e:
+            print('Error al importar: %s.%s: %s' % (nombre, metodo, e.message))
             import sys
             sys.exit(-1)
         metodo_clase = getattr(modulo, nombre.capitalize())
