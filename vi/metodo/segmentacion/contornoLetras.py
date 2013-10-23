@@ -19,21 +19,21 @@ class Segmentacion(object):
         """Recibe una lista de baldosas para ser pre-procesadas y mejorar
         la lectura de los caracteres. Retorna la lista de baldosas procesadas.
         """
-        out = [self._procesar(baldosa) for baldosa in baldosas]        
+        out = [self._procesar(baldosa) for baldosa in baldosas]
         out2 = []
         for letras in out:
             if len(letras)>4:
                 out2.append(letras)
-                
+
         return out2
-    
+
     def _procesar(self, baldosa):
         """Aplica los pre-procesadores a la baldosa. """
         procesada = baldosa
         for procesador in self._procesadores:
             procesada = procesador(procesada)
         return procesada
-    
+
     @staticmethod
     def procesador_areamedia(baldosa):
         """En base al promedio, retira elementos que podrían no ser letras """
@@ -51,16 +51,16 @@ class Segmentacion(object):
         filtrados = []
         for contorno, area in zip(contornos, areas):
             if 50 < area < mu - 0.05*sigma:
-                filtrados.append(contorno)        
+                filtrados.append(contorno)
 
         marcos = []
-        if len(filtrados)>4:
-            regiones = [cv2.boundingRect(contorno) for contorno in filtrados] 
-            _, binarizado = cv2.threshold(gris, 90, 255, 
-                                          cv2.THRESH_BINARY_INV)            
-            letras = [binarizado[y:(y+dy), x:(x+dx)] 
-                      for x, y, dx, dy in regiones] 
+        if len(filtrados) > 4:
+            regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
+            _, binario = cv2.threshold(gris, 90, 255, cv2.THRESH_BINARY_INV)
+            letras = [binario[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
+
             for letra in letras:
                 zoom = cv2.resize(letra, (100, 100))
                 marcos.append(zoom)
-        return marcos   
+
+        return marcos

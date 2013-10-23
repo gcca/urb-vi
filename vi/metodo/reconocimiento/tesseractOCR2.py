@@ -29,18 +29,18 @@ class Reconocimiento(object):
 
         # Enviando imagen binarizada al tesseract
         tesseract.SetCvImage(imgbincv, api)
-        text = api.GetUTF8Text()        
-        text = re.sub(r'\W+', '', text)        
+        text = api.GetUTF8Text()
+        text = re.sub(r'\W+', '', text)
         return text
 
     def ejecutar(self, baldosas):
         """
         Args:
-            baldosas - Arreglo de posibles placas, que contienen un arreglo de letras 
+            baldosas - Arreglo de posibles placas, que contienen un arreglo de letras
 
         Rets:
             array de las placas
-        """            
+        """
         placas = []
         for baldosa in baldosas:
             placas.append([self.leerPlaca(letra) for letra in baldosa])
