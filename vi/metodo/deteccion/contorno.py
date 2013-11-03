@@ -1,20 +1,21 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 
-"""Detección por búsqueda de contornos """
+"""Detección por búsqueda de contornos."""
 from __future__ import division
 
 import numpy as np
 import cv2
+from vi.util import dibujar_rectangulos, dibujar_contornos
 
 
 class Deteccion(object):
-    """Detección de contornos """
+    """Detección de contornos."""
 
     def __init__(self):
-        """Inicia la lista de filtros """
+        """Inicia la lista de filtros."""
         self.imagen = None
         def isfilter(attrname, methodclass):
-            """¿El método es filtro? """
+            """¿El método es filtro?."""
             return (attrname.startswith('filtro')
                     and hasattr(getattr(methodclass, attrname), '__class__'))
         self._filtros = [getattr(self, method) \
@@ -22,21 +23,89 @@ class Deteccion(object):
 
     def ejecutar(self, imagen):
         """Recibe una imagen y retorna una lista con las secciones limitadas
-        por los contornos """
+        por los contornos."""
         self.imagen = imagen
-        imgris = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
-        _, umbral = cv2.threshold(imgris, 100, 255, cv2.THRESH_BINARY)
-        contornos, _ = cv2.findContours(umbral,
-                                        cv2.RETR_TREE,
-                                        cv2.CHAIN_APPROX_NONE)
-        filtrados = []
-        for contorno in contornos:
-            if all(self.validar(contorno)):
-                filtrados.append(contorno)
+        contornos = self.__contornos()
+
+        if __debug__:
+            filtrados = self.__aplicar_filtros(contornos)
+        else:
+            filtrados = [c for c in contornos if all(self.validar(c))]
 
         regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
         baldosas = [imagen[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
         return baldosas
+
+    def __contornos(self):
+        """Obtener contornos de la imagen."""
+        def umbral_adaptativo(imagen,  # Umbral simple
+                              valor_max,  # umbral
+                              metodo_adaptativo,  # valor_max
+                              tipo_umbral,
+                              dim_bloque=None,  # centinela
+                              C=None):
+            """Calcula umbral simple o adaptativo según parámetros."""
+            if dim_bloque:
+                return cv2.adaptiveThreshold(imagen,
+                                             valor_max,
+                                             metodo_adaptativo,
+                                             tipo_umbral,
+                                             dim_bloque,
+                                             C)
+            else:
+                _, imagen_bin = cv2.threshold(imagen,
+                                              valor_max,
+                                              metodo_adaptativo,
+                                              tipo_umbral)
+                return imagen_bin
+
+        gris = cv2.cvtColor(self.imagen, cv2.COLOR_BGR2GRAY)
+        configs = [
+            (gris, 100, 255, cv2.THRESH_BINARY),  # (-o-) Esto debería retirarse
+            (gris, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
+             cv2.THRESH_BINARY, 13, 6),
+            (gris, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+             cv2.THRESH_BINARY, 31, 4),  # 13 7
+        ]
+        umbrales = [umbral_adaptativo(*c) for c in configs]
+
+        if __debug__:
+            # int(escala * dimension)
+            dim = tuple(int(0.6*d) for d in reversed(gris.shape))
+            cv2.imshow('tmp', np.vstack(cv2.resize(u, dim) for u in umbrales))
+            cv2.waitKey()
+
+        # Mezcla de contornos
+        def hallar_contornos(umbral):
+            """Envoltura de findContours."""
+            return cv2.findContours(umbral, cv2.RETR_TREE,
+                                    cv2.CHAIN_APPROX_NONE)[0]
+        mezcla = [hallar_contornos(umbral) for umbral in umbrales]
+        contornos = [contorno for contornos in mezcla for contorno in contornos]
+
+        if __debug__:
+            img_tmp = self.imagen.copy()
+            dibujar_contornos(img_tmp, contornos)
+            cv2.imshow('tmp', img_tmp)
+            cv2.waitKey()
+
+        return contornos
+
+    def __aplicar_filtros(self, contornos):
+        """Depuración: Aplicar filtros."""
+        filtrados = contornos
+        for filtro in self._filtros:
+            contornos = filtrados
+            filtrados = []
+            for contorno in contornos:
+                if filtro(contorno):
+                    filtrados.append(contorno)
+            contornos = filtrados
+            tmp = self.imagen.copy()
+            dibujar_rectangulos(tmp, [cv2.boundingRect(c) for c in contornos])
+            cv2.imshow('tmp', tmp)
+            cv2.waitKey()
+        return filtrados
 
     def validar(self, contorno):
         """Devuelve un generador con valores booleanos por cada filtro
@@ -47,44 +116,41 @@ class Deteccion(object):
         """
         return (filtrar(contorno) for filtrar in self._filtros)
 
-    @staticmethod
-    def filtro_a_num_pixel(contorno):
+    def filtro_a_num_pixel(self, contorno):
         """Filtro simple
-        No considerar como válido porque solo aplica a la imagen de la demo
+        No considerar como válido porque solo aplica a la imagen de la demo.
         """
         return 200 < len(contorno)
 
-    @staticmethod
-    def filtro_b_rect_horiz(contorno):
-        """Verifica que el contorno contiene un rectángulo horizontal """
+    def filtro_b_rect_horiz(self, contorno):
+        """Verifica que el contorno contiene un rectángulo horizontal."""
         _, _, ancho, alto = cv2.boundingRect(contorno)
-        return alto < ancho/2.5
+        return ancho <= 5*alto and ancho > 1.5*alto
 
     def filtro_c_amarillo_blanco(self, contorno):
-        """Filtro de color amarillo y blanco """
-        imagen = self.imagen
+        """Filtro de color amarillo y blanco."""
         x, y, dx, dy = cv2.boundingRect(contorno)
-        baldosa = imagen[y:(y+dy), x:(x+dx)]
+        hsv = self.imagen[y:(y+dy), x:(x+dx)]
 
-        # _ = cv2.medianBlur(baldosa, 5)
+        # _ = cv2.medianBlur(hsv, 5)
         # hsv = cv2.cvtColor(baldosa, cv2.COLOR_BGR2HSV)
-        hsv = baldosa
 
-        a = cv2.inRange(hsv, np.array((20, 100, 100)), np.array((30, 255, 255)))
-        b = cv2.inRange(hsv, np.array((100,100,10)), np.array((130, 130, 130)))
-        mascara = cv2.add(a, b)
+        # a = cv2.inRange(hsv,
+        #                 np.array((20, 100, 100)),
+        #                 np.array((30, 255, 255)))
+        # b = cv2.inRange(hsv,
+        #                 np.array((100, 100, 10)),
+        #                 np.array((130, 130, 130)))
+        # mascara = cv2.add(a, b)
+        mascara = cv2.inRange(hsv,
+                              np.array((70, 70, 70)),
+                              np.array((200, 200, 200)))
 
         erode = cv2.erode(mascara, None, iterations=1)
         dilate = cv2.dilate(erode, None, iterations=3)
-
         dilate = cv2.cvtColor(dilate, cv2.COLOR_GRAY2BGR)
-
         num_neg = (dilate == 0).sum()
         num_pos = dilate.size - num_neg
         ratio = num_pos/dilate.size
-
-        # if ratio > 0.7:
-        #     cv2.imshow('vii', np.hstack((dilate, hsv)))
-        #     cv2.waitKey()
 
         return ratio > 0.7
