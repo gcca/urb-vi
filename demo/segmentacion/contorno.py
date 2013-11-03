@@ -3,7 +3,7 @@
 Demo de segmentación por contornos
 """
 import cv2
-from vi.metodo.segmentacion.contorno1 import Segmentacion
+from vi.metodo.segmentacion.contorno import Segmentacion
 
 def demo():
     """Lee imagen y lista las regiones donde podrían existir placas """

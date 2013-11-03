@@ -43,5 +43,7 @@ class Reconocimiento(object):
         """
         placas = []
         for baldosa in baldosas:
-            placas.append([self.leerPlaca(letra) for letra in baldosa])
+            texto = [self.leerPlaca(letra) for letra in baldosa]
+            texto.reverse()
+            placas.append(''.join(texto))
         return placas

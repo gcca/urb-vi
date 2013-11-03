@@ -24,16 +24,9 @@ def ejecutar(resultado=None):
        como `Exception` o alguna otra afín.
     """
     assert PROCESOS, 'Invocar antes la función `iniciar(args)`'
-    try:
-        for proceso in PROCESOS:
-            resultado = proceso.ejecutar(resultado)
-    except ValueError as err:
-        raise SystemExit('\nMódulo '
-                         + str(type(proceso))
-                         + ' recibió parámetro incorreco: '
-                         + err.message)
-    else:
-        return resultado
+    for proceso in PROCESOS:
+        resultado = proceso.ejecutar(resultado)
+    return resultado
 
 def iniciar(args):
     """() -> NoneType

@@ -2,4 +2,6 @@
 
 class Deteccion(object):
     def ejecutar(self,img):
-        return img;
+        baldosas = []
+        baldosas.append(img)
+        return baldosas;

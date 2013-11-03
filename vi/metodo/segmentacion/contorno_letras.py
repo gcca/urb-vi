@@ -5,6 +5,7 @@
 from __future__ import division
 
 import cv2
+import numpy as np
 import vi.metodo.segmentacion.contorno_base as contorno_base
 
 
@@ -27,8 +28,17 @@ class Segmentacion(contorno_base.Segmentacion):
             _, binario = cv2.threshold(gris, 90, 255, cv2.THRESH_BINARY_INV)
             letras = [binario[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
 
+            base = 1
+            total = 2*base
+            factor = 1.2
+
             for letra in letras:
-                zoom = cv2.resize(letra, (100, 100))
+                alto, ancho = letra.shape
+                zoom = cv2.resize(letra, (int(factor*alto), int(factor*ancho)))
+                alto, ancho = zoom.shape
+                extra = np.zeros((alto+total, ancho+total), np.uint8)
+                extra[base:alto+base, base:ancho+base] = zoom
+                zoom = extra
                 marcos.append(zoom)
 
         return marcos
