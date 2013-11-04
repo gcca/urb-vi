@@ -43,3 +43,5 @@ tests/gztest.py
 tests/ls
 .bzr
 privado
+.bzrignore
+.settings
