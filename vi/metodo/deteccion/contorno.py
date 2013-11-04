@@ -27,10 +27,9 @@ class Deteccion(object):
         self.imagen = imagen
         contornos = self.__contornos()
 
-        if __debug__:
-            filtrados = self.__aplicar_filtros(contornos)
-        else:
-            filtrados = [c for c in contornos if all(self.validar(c))]
+        filtrados = (self.__aplicar_filtros(contornos)
+                     if __debug__
+                     else [c for c in contornos if all(self.validar(c))])
 
         regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
         baldosas = [imagen[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
@@ -72,7 +71,7 @@ class Deteccion(object):
         if __debug__:
             # int(escala * dimension)
             dim = tuple(int(0.6*d) for d in reversed(gris.shape))
-            cv2.imshow('tmp', np.vstack(cv2.resize(u, dim) for u in umbrales))
+            cv2.imshow('deteccion', np.vstack(cv2.resize(u, dim) for u in umbrales))
             cv2.waitKey()
 
         # Mezcla de contornos
@@ -86,7 +85,7 @@ class Deteccion(object):
         if __debug__:
             img_tmp = self.imagen.copy()
             dibujar_contornos(img_tmp, contornos)
-            cv2.imshow('tmp', img_tmp)
+            cv2.imshow('deteccion', img_tmp)
             cv2.waitKey()
 
         return contornos
@@ -100,10 +99,11 @@ class Deteccion(object):
             for contorno in contornos:
                 if filtro(contorno):
                     filtrados.append(contorno)
+            print(filtro.__name__)
             contornos = filtrados
             tmp = self.imagen.copy()
             dibujar_rectangulos(tmp, [cv2.boundingRect(c) for c in contornos])
-            cv2.imshow('tmp', tmp)
+            cv2.imshow('deteccion', tmp)
             cv2.waitKey()
         return filtrados
 
@@ -116,41 +116,30 @@ class Deteccion(object):
         """
         return (filtrar(contorno) for filtrar in self._filtros)
 
-    def filtro_a_num_pixel(self, contorno):
+    def filtro_a(self, contorno):
         """Filtro simple
         No considerar como válido porque solo aplica a la imagen de la demo.
         """
-        return 200 < len(contorno)
+        return 60 < len(contorno)
 
-    def filtro_b_rect_horiz(self, contorno):
+    def filtro_b(self, contorno):
         """Verifica que el contorno contiene un rectángulo horizontal."""
         _, _, ancho, alto = cv2.boundingRect(contorno)
         return ancho <= 5*alto and ancho > 1.5*alto
 
-    def filtro_c_amarillo_blanco(self, contorno):
+    def filtro_c(self, contorno):
         """Filtro de color amarillo y blanco."""
         x, y, dx, dy = cv2.boundingRect(contorno)
         hsv = self.imagen[y:(y+dy), x:(x+dx)]
-
         # _ = cv2.medianBlur(hsv, 5)
-        # hsv = cv2.cvtColor(baldosa, cv2.COLOR_BGR2HSV)
-
-        # a = cv2.inRange(hsv,
-        #                 np.array((20, 100, 100)),
-        #                 np.array((30, 255, 255)))
-        # b = cv2.inRange(hsv,
-        #                 np.array((100, 100, 10)),
-        #                 np.array((130, 130, 130)))
-        # mascara = cv2.add(a, b)
-        mascara = cv2.inRange(hsv,
-                              np.array((70, 70, 70)),
-                              np.array((200, 200, 200)))
-
+        # hsv = cv2.cvtColor(hsv, cv2.COLOR_BGR2HSV)
+        # mascara = cv2.add(cv2.inRange(hsv, (20, 100, 100), (30, 255, 255)),
+        #                   cv2.inRange(hsv, (100, 100, 10), (130, 130, 130)))
+        mascara = cv2.inRange(hsv, (10, 10, 10), (200, 230, 230))  # .2:70
         erode = cv2.erode(mascara, None, iterations=1)
         dilate = cv2.dilate(erode, None, iterations=3)
         dilate = cv2.cvtColor(dilate, cv2.COLOR_GRAY2BGR)
         num_neg = (dilate == 0).sum()
         num_pos = dilate.size - num_neg
         ratio = num_pos/dilate.size
-
         return ratio > 0.7
