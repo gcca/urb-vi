@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 """Detección por búsqueda de contornos."""
-from __future__ import division
+from __future__ import division, print_function
 
 import numpy as np
 import cv2
@@ -60,7 +60,7 @@ class Deteccion(object):
 
         gris = cv2.cvtColor(self.imagen, cv2.COLOR_BGR2GRAY)
         configs = [
-            (gris, 100, 255, cv2.THRESH_BINARY),  # (-o-) Esto debería retirarse
+            # (gris, 100, 255, cv2.THRESH_BINARY),  # (-o-) Debería retirarse
             (gris, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
              cv2.THRESH_BINARY, 13, 6),
             (gris, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
@@ -69,9 +69,10 @@ class Deteccion(object):
         umbrales = [umbral_adaptativo(*c) for c in configs]
 
         if __debug__:
+            print('1. Umbrales')
             # int(escala * dimension)
-            dim = tuple(int(0.6*d) for d in reversed(gris.shape))
-            cv2.imshow('deteccion', np.vstack(cv2.resize(u, dim) for u in umbrales))
+            dim = tuple(int(0.4*d) for d in reversed(gris.shape))
+            cv2.imshow('det', np.vstack(cv2.resize(u, dim) for u in umbrales))
             cv2.waitKey()
 
         # Mezcla de contornos
@@ -83,15 +84,18 @@ class Deteccion(object):
         contornos = [contorno for contornos in mezcla for contorno in contornos]
 
         if __debug__:
+            print('2. Contornos')
             img_tmp = self.imagen.copy()
             dibujar_contornos(img_tmp, contornos)
-            cv2.imshow('deteccion', img_tmp)
+            cv2.imshow('det', img_tmp)
             cv2.waitKey()
 
         return contornos
 
     def __aplicar_filtros(self, contornos):
         """Depuración: Aplicar filtros."""
+        print('3.')
+        i = 0
         filtrados = contornos
         for filtro in self._filtros:
             contornos = filtrados
@@ -99,11 +103,12 @@ class Deteccion(object):
             for contorno in contornos:
                 if filtro(contorno):
                     filtrados.append(contorno)
-            print(filtro.__name__)
+            i += 1
+            print('  3.%s %s' % (i, filtro.__name__))
             contornos = filtrados
             tmp = self.imagen.copy()
             dibujar_rectangulos(tmp, [cv2.boundingRect(c) for c in contornos])
-            cv2.imshow('deteccion', tmp)
+            cv2.imshow('det', tmp)
             cv2.waitKey()
         return filtrados
 
