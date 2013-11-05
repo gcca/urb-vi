@@ -45,3 +45,5 @@ tests/ls
 privado
 .bzrignore
 .settings
+*.js
+*.css
