@@ -45,15 +45,16 @@ class Segmentacion(object):
                                         cv2.RETR_TREE,
                                         cv2.CHAIN_APPROX_SIMPLE)
 
-        areas = [cv2.contourArea(c) for c in contornos]
-        d_areas =  np.array(areas)
-        mu = d_areas.mean()
-        sigma = d_areas.std()
-
         filtrados = []
-        for contorno, area in zip(contornos, areas):
-            if 50 < area < mu - 0.05*sigma:
-                filtrados.append(contorno)
+        if len(contornos):
+            areas = [cv2.contourArea(c) for c in contornos]
+            d_areas = np.array(areas)
+            mu = d_areas.mean()
+            sigma = d_areas.std()
+
+            for contorno, area in zip(contornos, areas):
+                if 50 < area < mu - 0.09*sigma:
+                    filtrados.append(contorno)
 
         return gris, filtrados
 
