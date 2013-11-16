@@ -32,7 +32,6 @@ class Deteccion(object):
         filtrados = (self.__aplicar_filtros(contornos)
                      if __debug__
                      else [c for c in contornos if all(self.validar(c))])
-
         regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
         baldosas = [imagen[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
         return baldosas
@@ -101,7 +100,9 @@ class Deteccion(object):
         # hsv = cv2.cvtColor(hsv, cv2.COLOR_BGR2HSV)
         # mascara = cv2.add(cv2.inRange(hsv, (20, 100, 100), (30, 255, 255)),
         #                   cv2.inRange(hsv, (100, 100, 10), (130, 130, 130)))
-        mascara = cv2.inRange(hsv, (10, 10, 10), (200, 230, 230))  # .2:70
+        mascara = cv2.inRange(hsv, 
+                              np.array((10, 10, 10), np.uint8), 
+                              np.array((200, 230, 230), np.uint8))  # .2:70
         erode = cv2.erode(mascara, None, iterations=1)
         dilate = cv2.dilate(erode, None, iterations=3)
         dilate = cv2.cvtColor(dilate, cv2.COLOR_GRAY2BGR)

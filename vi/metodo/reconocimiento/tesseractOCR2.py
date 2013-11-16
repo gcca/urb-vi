@@ -24,6 +24,7 @@ class Reconocimiento(object):
         # Configuración del tesseract
         api = tesseract.TessBaseAPI()
         api.Init(".", "eng", tesseract.OEM_DEFAULT)
+        api.SetVariable('tessedit_char_whitelist','0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ')
         # PSM_SINGLE_CHAR para lectura caracter a caracter
         api.SetPageSegMode(tesseract.PSM_SINGLE_CHAR)
 

@@ -30,7 +30,7 @@ class Segmentacion(contorno_base.Segmentacion):
 
             base = 1
             total = 2*base
-            factor = 1.2
+            factor = 1.5
 
             for letra in letras:
                 alto, ancho = letra.shape
