@@ -94,20 +94,17 @@ class Deteccion(object):
         return ancho <= 5*alto and ancho > 1.5*alto
 
     def filtro_c(self, contorno):
-        """Filtro de color amarillo y blanco."""
+        """Filtro blanco - amarillo."""
         x, y, dx, dy = cv2.boundingRect(contorno)
         hsv = self.imagen[y:(y+dy), x:(x+dx)]
-        # _ = cv2.medianBlur(hsv, 5)
-        # hsv = cv2.cvtColor(hsv, cv2.COLOR_BGR2HSV)
-        # mascara = cv2.add(cv2.inRange(hsv, (20, 100, 100), (30, 255, 255)),
-        #                   cv2.inRange(hsv, (100, 100, 10), (130, 130, 130)))
-        mascara = cv2.inRange(hsv,
-                              np.array((10, 10, 10), np.uint8),
-                              np.array((200, 230, 230), np.uint8))  # .2:70
+        hsv = cv2.cvtColor(hsv, cv2.COLOR_BGR2HSV)
+        hsv = cv2.GaussianBlur(hsv, (3, 3), 0)
+        # blanco, amarillo
+        mascara = cv2.add(cv2.inRange(hsv, (0, 0, 90), (180, 100, 255)),
+                          cv2.inRange(hsv, (10, 100, 100), (40, 255, 255)))
         erode = cv2.erode(mascara, None, iterations=1)
         dilate = cv2.dilate(erode, None, iterations=3)
-        dilate = cv2.cvtColor(dilate, cv2.COLOR_GRAY2BGR)
         num_neg = (dilate == 0).sum()
         num_pos = dilate.size - num_neg
         ratio = num_pos/dilate.size
-        return ratio > 0.7
+        return ratio > 0.5
