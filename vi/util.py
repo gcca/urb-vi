@@ -72,15 +72,17 @@ def generar_umbrales(imagen, long_bloque, c, long_bloque_p=None, c_p=None):
                                      cv2.THRESH_BINARY,
                                      long_bloque_p,
                                      c_p)
-    if __debug__:
-        print('- Umbrales')
-        # int(escala * dimension)
-        dim = tuple(int(0.4*d) for d in reversed(gris.shape))
-        cv2.imshow('umbrales',
-                   np.vstack((cv2.resize(umbral_1, dim),
-                              cv2.resize(umbral_2, dim))))
-        cv2.waitKey()
-        cv2.destroyWindow('umbrales')
+
+    # Descomentar cuando se crea conveniente
+    # if __debug__:
+    #     print('- Umbrales')
+    #     # int(escala * dimension)
+    #     dim = tuple(int(0.7*d) for d in reversed(gris.shape))
+    #     cv2.imshow('umbrales',
+    #                np.vstack((cv2.resize(umbral_1, dim),
+    #                           cv2.resize(umbral_2, dim))))
+    #     cv2.waitKey()
+    #     cv2.destroyWindow('umbrales')
 
     return umbral_1, umbral_2
 
