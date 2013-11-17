@@ -7,6 +7,7 @@ from __future__ import division
 import cv2
 import numpy as np
 # from itertools import izip
+from vi.util import generar_umbrales, hallar_contornos
 
 
 class Segmentacion(object):
@@ -39,12 +40,10 @@ class Segmentacion(object):
                 filtrados por su área.
         """
         gris = cv2.cvtColor(baldosa, cv2.COLOR_BGR2GRAY)
-        _, binarizadoSrc = cv2.threshold(gris, 90, 255, cv2.THRESH_BINARY)
-        # binarizadoSrc2 = cv2.cvtColor(binarizadoSrc, cv2.COLOR_GRAY2BGR)
-        contornos, _ = cv2.findContours(binarizadoSrc,
-                                        cv2.RETR_TREE,
-                                        cv2.CHAIN_APPROX_SIMPLE)
-
+        umbrales = generar_umbrales(baldosa, 13, 6, 31, 4)
+        contornos = hallar_contornos(umbrales,
+                                     cv2.RETR_TREE,
+                                     cv2.CHAIN_APPROX_NONE)
         filtrados = []
         if len(contornos):
             areas = [cv2.contourArea(c) for c in contornos]
@@ -55,6 +54,11 @@ class Segmentacion(object):
             for contorno, area in zip(contornos, areas):
                 if 50 < area < mu - 0.09*sigma:
                     filtrados.append(contorno)
+
+        # tmp = baldosa.copy()
+        # dibujar_contornos(tmp, filtrados)
+        # cv2.imshow('seg', tmp)
+        # cv2.waitKey()
 
         return gris, filtrados
 

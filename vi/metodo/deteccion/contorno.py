@@ -7,6 +7,7 @@ import numpy as np
 import cv2
 from vi.util import dibujar_rectangulos, dibujar_contornos, \
     generar_umbrales, hallar_contornos
+import numpy as np
 
 
 class Deteccion(object):
