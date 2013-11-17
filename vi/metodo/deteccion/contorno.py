@@ -108,3 +108,19 @@ class Deteccion(object):
         num_pos = dilate.size - num_neg
         ratio = num_pos/dilate.size
         return ratio > 0.5
+
+    def filtro_d(self, contorno):
+        """Filtro por número de contornos internos. Pretende estimar
+        la cantidad de posibles letras."""
+        x, y, dx, dy = cv2.boundingRect(contorno)
+        baldosa = self.imagen[y:(y+dy), x:(x+dx)]
+        umbrales = generar_umbrales(baldosa, 35, 7, 39, 5)
+        mezcla = [cv2.findContours(umbral,
+                                   cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)[0]
+                  for umbral in umbrales]
+
+        for contornos in mezcla:
+            if len(contornos) < 6:
+                return False
+
+        return True
