@@ -3,6 +3,7 @@
 """Detección por búsqueda de contornos."""
 from __future__ import division, print_function
 
+import numpy as np
 import cv2
 from vi.util import dibujar_rectangulos, dibujar_contornos, \
     generar_umbrales, hallar_contornos
@@ -100,8 +101,8 @@ class Deteccion(object):
         # hsv = cv2.cvtColor(hsv, cv2.COLOR_BGR2HSV)
         # mascara = cv2.add(cv2.inRange(hsv, (20, 100, 100), (30, 255, 255)),
         #                   cv2.inRange(hsv, (100, 100, 10), (130, 130, 130)))
-        mascara = cv2.inRange(hsv, 
-                              np.array((10, 10, 10), np.uint8), 
+        mascara = cv2.inRange(hsv,
+                              np.array((10, 10, 10), np.uint8),
                               np.array((200, 230, 230), np.uint8))  # .2:70
         erode = cv2.erode(mascara, None, iterations=1)
         dilate = cv2.dilate(erode, None, iterations=3)
