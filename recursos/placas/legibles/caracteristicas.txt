@@ -1,0 +1,5 @@
+Placas base, fáciles de leer
+-Legibles
+-Cámara apuntando directamente o casi directamente a la placa
+-La placa no contiene elementos que se confundan como letras
+-La placa no contiene elementos que alteren las letras
