@@ -27,7 +27,7 @@ class Deteccion(object):
     def ejecutar(self, imagen):
         """Recibe una imagen y retorna una lista con las secciones limitadas
         por los contornos."""
-        self.imagen = imagen
+        self.imagen = self.Suavizar(imagen)
         contornos = self.__contornos()
 
         filtrados = (self.__aplicar_filtros(contornos)
@@ -36,6 +36,11 @@ class Deteccion(object):
         regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
         baldosas = [imagen[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
         return baldosas
+
+    def Suavizar(self,img):
+        for i in xrange(1,31,2):
+            suavizado = cv2.bilateralFilter(img, i, i*2, i/2)
+        return suavizado
 
     def __contornos(self):
         """Obtener contornos de la imagen."""
@@ -68,7 +73,7 @@ class Deteccion(object):
             print('  3.%s %s' % (i, filtro.__name__))
             contornos = filtrados
             tmp = self.imagen.copy()
-            dibujar_rectangulos(tmp, [cv2.boundingRect(c) for c in contornos])
+            dibujar_rectangulos(tmp, contornos)
             cv2.imshow('det', tmp)
             cv2.waitKey()
         return filtrados
@@ -100,8 +105,8 @@ class Deteccion(object):
         hsv = cv2.cvtColor(hsv, cv2.COLOR_BGR2HSV)
         hsv = cv2.GaussianBlur(hsv, (3, 3), 0)
         # blanco, amarillo
-        mascara = cv2.add(cv2.inRange(hsv, (0, 0, 90), (180, 100, 255)),
-                          cv2.inRange(hsv, (10, 100, 100), (40, 255, 255)))
+        mascara = cv2.add(cv2.inRange(hsv, np.array((0, 0, 90), np.uint8), np.array((180, 100, 255), np.uint8)),
+                          cv2.inRange(hsv, np.array((10, 100, 100), np.uint8), np.array((40, 255, 255), np.uint8)))
         erode = cv2.erode(mascara, None, iterations=1)
         dilate = cv2.dilate(erode, None, iterations=3)
         num_neg = (dilate == 0).sum()

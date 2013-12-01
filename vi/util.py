@@ -11,7 +11,7 @@ def __color():
     return randz(0, 255), randz(0, 255), randz(0, 255)
 
 
-def dibujar_contornos(imagen, contornos):
+def dibujar_contornos(imagen, contornos, brocha=1):
     """Dibujar contornos sobre imagen.
 
     Args:
@@ -19,12 +19,14 @@ def dibujar_contornos(imagen, contornos):
             Imagen sobre la que se dibuja los contornos.
         contornos (list)
             Lista de contornos a dibujar.
+        brocha (int)
+            Número de pixeles de la brocha.
     """
     for contorno in contornos:
-        cv2.drawContours(imagen, [contorno], -1, __color(), 2)
+        cv2.drawContours(imagen, [contorno], -1, __color(), brocha)
 
 
-def dibujar_rectangulos(imagen, contornos):
+def dibujar_rectangulos(imagen, contornos, brocha=1):
     """Dibujar delimitador rectangular sobre imagen.
 
     Args:
@@ -32,9 +34,11 @@ def dibujar_rectangulos(imagen, contornos):
             Imagen sobre la que se dibuja los contornos.
         contornos (list)
             Lista de contornos sobre los que calculará el rectángulo.
+        brocha (int)
+            Número de pixeles de la brocha.
     """
-    for x, y, ancho, alto in contornos:
-        cv2.rectangle(imagen, (x, y), (x+ancho, y+alto), __color(), 2)
+    for x, y, ancho, alto in (cv2.boundingRect(c) for c in contornos):
+        cv2.rectangle(imagen, (x, y), (x+ancho, y+alto), __color(), brocha)
 
 
 def generar_umbrales(imagen, long_bloque, c, long_bloque_p=None, c_p=None):
