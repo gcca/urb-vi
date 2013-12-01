@@ -45,16 +45,14 @@ class Segmentacion(object):
                                      cv2.RETR_TREE,
                                      cv2.CHAIN_APPROX_NONE)
         filtrados = []
-        if len(contornos):
+        if len(contornos) > 5:
             areas = [cv2.contourArea(c) for c in contornos]
             d_areas = np.array(areas)
             mu = d_areas.mean()
             sigma = d_areas.std()
-
             for contorno, area in zip(contornos, areas):
-                if 50 < area < mu - 0.09*sigma:
+                if mu - sigma < area < mu - 0.09*sigma:
                     filtrados.append(contorno)
-
         # tmp = baldosa.copy()
         # dibujar_contornos(tmp, filtrados)
         # cv2.imshow('seg', tmp)
