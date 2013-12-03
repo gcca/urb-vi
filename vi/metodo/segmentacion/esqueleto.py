@@ -20,11 +20,11 @@ class Segmentacion(object):
         # base
         gris = cv2.cvtColor(baldosa, cv2.COLOR_BGR2GRAY)
         umbral = cv2.adaptiveThreshold(gris,
-                                  255,
-                                  cv2.ADAPTIVE_THRESH_MEAN_C,
-                                  cv2.THRESH_BINARY_INV,
-                                  19,
-                                  0)
+                                       255,
+                                       cv2.ADAPTIVE_THRESH_MEAN_C,
+                                       cv2.THRESH_BINARY_INV,
+                                       19,
+                                       0)
 
         c = 7
         dy, dx = umbral.shape
