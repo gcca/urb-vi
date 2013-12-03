@@ -38,7 +38,7 @@ class Deteccion(object):
         return baldosas
 
     def suavizar(self,img):
-        for i in xrange(1,31,2):
+        for i in range(1, 31, 2):
             suavizado = cv2.bilateralFilter(img, i, i*2, i/2)
         return suavizado
 
