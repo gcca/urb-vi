@@ -3,8 +3,13 @@
 import cv2.cv as cv
 import tesseract
 import re
+import locale
+
 
 class Reconocimiento(object):
+
+    def __init__(self):
+        locale.setlocale(locale.LC_NUMERIC, 'C')
 
     def ejecutar(self, baldosas):
         return [self.leerPlaca(baldosa) for baldosa in baldosas]
