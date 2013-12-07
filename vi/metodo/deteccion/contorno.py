@@ -30,17 +30,16 @@ class Deteccion(object):
         self.imagen = self.suavizar(imagen)
         contornos = self.__contornos()
 
-        filtrados = (self.__aplicar_filtros(contornos)
-                     if __debug__
-                     else [c for c in contornos if all(self.validar(c))])
+        # filtrados = (self.__aplicar_filtros(contornos)
+        #              if __debug__
+        #              else [c for c in contornos if all(self.validar(c))])
+        filtrados = [c for c in contornos if all(self.validar(c))]
         regiones = [cv2.boundingRect(contorno) for contorno in filtrados]
         baldosas = [imagen[y:(y+dy), x:(x+dx)] for x, y, dx, dy in regiones]
         return baldosas
 
-    def suavizar(self,img):
-        for i in range(1, 31, 2):
-            suavizado = cv2.bilateralFilter(img, i, i*2, i/2)
-        return suavizado
+    def suavizar(self, img):
+        return cv2.bilateralFilter(img, 29, 58, 14.5)
 
     def __contornos(self):
         """Obtener contornos de la imagen."""
@@ -49,34 +48,34 @@ class Deteccion(object):
                                      cv2.RETR_TREE,
                                      cv2.CHAIN_APPROX_NONE)
 
-        if __debug__:
-            print('2. Contornos')
-            img_tmp = self.imagen.copy()
-            dibujar_contornos(img_tmp, contornos)
-            cv2.imshow('det', img_tmp)
-            cv2.waitKey()
+        # if __debug__:
+        #     print('2. Contornos')
+        #     img_tmp = self.imagen.copy()
+        #     dibujar_contornos(img_tmp, contornos)
+        #     cv2.imshow('det', img_tmp)
+        #     cv2.waitKey()
 
         return contornos
 
-    def __aplicar_filtros(self, contornos):
-        """Depuración: Aplicar filtros."""
-        print('3.')
-        i = 0
-        filtrados = contornos
-        for filtro in self._filtros:
-            contornos = filtrados
-            filtrados = []
-            for contorno in contornos:
-                if filtro(contorno):
-                    filtrados.append(contorno)
-            i += 1
-            print('  3.%s %s' % (i, filtro.__name__))
-            contornos = filtrados
-            tmp = self.imagen.copy()
-            dibujar_rectangulos(tmp, contornos)
-            cv2.imshow('det', tmp)
-            cv2.waitKey()
-        return filtrados
+    # def __aplicar_filtros(self, contornos):
+    #     """Depuración: Aplicar filtros."""
+    #     print('3.')
+    #     i = 0
+    #     filtrados = contornos
+    #     for filtro in self._filtros:
+    #         contornos = filtrados
+    #         filtrados = []
+    #         for contorno in contornos:
+    #             if filtro(contorno):
+    #                 filtrados.append(contorno)
+    #         i += 1
+    #         print('  3.%s %s' % (i, filtro.__name__))
+    #         contornos = filtrados
+    #         tmp = self.imagen.copy()
+    #         dibujar_rectangulos(tmp, contornos)
+    #         cv2.imshow('det', tmp)
+    #         cv2.waitKey()
+    #     return filtrados
 
     def validar(self, contorno):
         """Devuelve un generador con valores booleanos por cada filtro
