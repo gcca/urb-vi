@@ -5,8 +5,7 @@ import cv2
 class Captura(object):
     """Lee imagen desde un fichero """
 
-    @staticmethod
-    def ejecutar(ruta):
+    def ejecutar(self, ruta):
         """Retorna la imagen de la `ruta` """
         if not os.path.exists(ruta):
             raise ValueError('No existe el fichero con ruta ' + ruta)

@@ -33,17 +33,18 @@ def iniciar(args):
 
     Recaba las clase definidas en `args`
 
-    'fichero'    Imagen         Imagen            Arreglo            Placas
+    'fichero'    Imagen         Imagen            Lista              Placas
         +---------+  +-----------+  +--------------+  +----------------+
       o-| Captura |->| Deteccion |->| Segmentacion |->| Reconocimiento |-@
         +---------+  +-----------+  +--------------+  +----------------+
 
     Args:
         args - Objeto con atributos de los métodos
-        >>> args.met_captura = 'demo'
-        >>> args.met_deteccion = 'demo'
-        >>> args.met_segmentacion = 'demo'
-        >>> args.met_reconocimiento = 'demo'
+
+    >>> args.met_captura = 'demo'
+    >>> args.met_deteccion = 'demo'
+    >>> args.met_segmentacion = 'demo'
+    >>> args.met_reconocimiento = 'demo'
     """
     for nombre in ['captura', 'deteccion', 'segmentacion', 'reconocimiento']:
         metodo = getattr(args, 'met_' + nombre)
