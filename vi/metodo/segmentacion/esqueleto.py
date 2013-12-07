@@ -55,9 +55,9 @@ class Segmentacion(object):
 
         contornos = [c for c in contornos if lon < len(c) and esrecth(c)]
 
-        if __debug__:
-            vi.util.dibujar_rectangulos(baldosa, contornos, 2)
-            cv2.imshow('seg_esq1', baldosa)
+        # if __debug__:
+        #     vi.util.dibujar_rectangulos(baldosa, contornos, 2)
+        #     cv2.imshow('seg_esq1', baldosa)
 
         if not len(contornos): return None
 
@@ -79,8 +79,8 @@ class Segmentacion(object):
         dy, dx = corte.shape
         corte = cv2.resize(corte, (int(0.2*dx), int(0.2*dy)))
 
-        if __debug__:
-            cv2.imshow('seg_esq2', corte)
-            cv2.waitKey()
+        # if __debug__:
+        #     cv2.imshow('seg_esq2', corte)
+        #     cv2.waitKey()
 
         return corte
